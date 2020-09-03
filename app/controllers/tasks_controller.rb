@@ -16,9 +16,9 @@ class TasksController < ApplicationController
 
     def create
        # @tasks = Task.new(task_params)
-       @tasks = current_user.tasks.build(task_params)
+       @task = current_user.tasks.build(task_params)
       # @tasks.user_id = current_user.id
-    if @tasks.save
+    if @task.save
       flash[:success] = 'タスクを投稿しました。'
       redirect_to root_url
     else
