@@ -17,14 +17,13 @@ class TasksController < ApplicationController
     def create
        # @tasks = Task.new(task_params)
        @task = current_user.tasks.build(task_params)
-      # @tasks.user_id = current_user.id
     if @task.save
       flash[:success] = 'タスクを投稿しました。'
       redirect_to root_url
     else
       @tasks = current_user.tasks.order(id: :desc).page(params[:page])
       flash.now[:danger] = 'タスクの投稿に失敗しました。'
-      render 'toppages/index'
+      render :new
     end
 
     #if @task.save
@@ -60,14 +59,14 @@ class TasksController < ApplicationController
     private
     
     def set_task
-        @task = Task.find(params[:id])
+        @task = current_user.tasks.find(params[:id])
     end
     def task_params
         params.require(:task).permit(:id, :content, :status)
     end
     
     def correct_user
-        @task = current_user.tasks.user.find_by(id: params[:id])
+        @tasks = current_user.tasks.user.find_by(id: params[:id])
     unless @task
         redirect_to root_url
     end
